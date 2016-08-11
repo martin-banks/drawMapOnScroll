@@ -1,0 +1,19 @@
+{
+  "name": "draw_map_on_scroll",
+  "version": "1.0.0",
+  "description": "Experimenting with changing the display of a point to point map as the reader scrolls through a story",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martin-banks/drawMapOnScroll.git"
+  },
+  "author": "Martin Banks",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/martin-banks/drawMapOnScroll/issues"
+  },
+  "homepage": "https://github.com/martin-banks/drawMapOnScroll#readme"
+}
