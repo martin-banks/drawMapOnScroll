@@ -1,0 +1,36 @@
+h1{
+	margin: 0;
+}
+
+
+.svgHolder {
+	top: 0;
+	left: 0;
+	position:fixed;
+	width: 200px;
+	background-color: rgba(0, 0, 0, 0.05);
+	height: 100%
+}
+
+svg {
+	height:100%;
+	margin-top: 100%;
+	margin-left: 20%;
+}
+.st0 {
+	fill: none;
+}
+
+section {
+	margin: 0 auto;
+	width: 100%;
+	max-width: 600px;
+	padding-left: 50px ;
+	padding-top: 100px;
+	overflow: auto;
+}
+
+p {
+	font-size: 24px;
+	line-height: 32px;
+}

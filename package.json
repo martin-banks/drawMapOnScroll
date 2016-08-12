@@ -4,7 +4,7 @@
   "description": "Experimenting with changing the display of a point to point map as the reader scrolls through a story",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "server": "http-server -o"
   },
   "repository": {
     "type": "git",
