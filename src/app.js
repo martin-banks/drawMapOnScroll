@@ -4,16 +4,21 @@
 	const parCount = state.chapters.length;
 
 	function articleSectionTemplate(chapters){
-		return chapters.map((chapter,index)=>{
-			return `
-				<section id="section${index}">
-					<h1>${chapter.article.headline}</h1>
-					${chapter.article.text.map((par, i)=>{
-						return `<p>${par}</p>`
-					}).join('')}	
-				</section>
-			`
-		}).join('')	
+		return `<article>
+			${ chapters.map((chapter,index)=>{
+				return `
+					<section id="section${index}">
+						<img class="displayImage" src="${state.imagePath}${chapter.article.image}" alt="">
+						<h1>${chapter.article.headline}</h1>
+						${chapter.article.text.map((par, i)=>{
+							return `<p>${par}</p>`
+						}).join('')}	
+					</section>
+				`
+				}).join('')
+			}
+		</article>`
+		
 	}
 
 

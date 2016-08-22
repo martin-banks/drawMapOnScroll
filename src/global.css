@@ -3,7 +3,16 @@ body {
 	padding: 0;
 }
 h1{
-	margin: 0;
+	margin: 0 40px 32px 40px;
+	padding-bottom: 16px;
+	font-size: 40px;
+	line-height: 1.2;
+	border-bottom: solid 1px #ccc;
+}
+
+.displayImage {
+	width: 100%;
+	margin-bottom: 32px;
 }
 
 
@@ -13,7 +22,6 @@ h1{
 	position:fixed;
 	width: 200px;
 	background-color: rgba(0, 0, 0, 0.05);
-	//height: 100%;
 	margin: 0;
 	padding: 0;
 }
@@ -30,19 +38,24 @@ svg {
 	fill: none;
 }
 
+article {
+	display: block;
+	margin-left: 200px;
+}
 section {
 	margin: 0 auto;
 	margin-top: 200px;
 	width: 100%;
-	max-width: 600px;
-	padding-left: 50px ;
-	padding-top: 100px;
+	max-width: 700px;
+	//padding-left: 50px ;
+	//padding-top: 100px;
 	overflow: auto;
 }
 
 p {
 	font-size: 24px;
 	line-height: 32px;
+	margin: 16px 40px;
 }
 #labelContainer {
 	position: absolute;
