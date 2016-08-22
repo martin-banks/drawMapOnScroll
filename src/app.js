@@ -1,8 +1,7 @@
 (()=>{
 
-
 	const container = document.getElementById('appContainer');
-	const parCount = state.lines.length;
+	const parCount = state.chapters.length;
 
 	function articleSectionTemplate(chapters){
 		return chapters.map((chapter,index)=>{
@@ -14,13 +13,12 @@
 					}).join('')}	
 				</section>
 			`
-		}).join('')
-		
+		}).join('')	
 	}
 
 
 	function linesTemplate(){
-		return state.lines.map((line, index)=>{
+		return state.chapters.map((line, index)=>{
 			return `
 				<path id="${line.id}" ${state.svgStyle} stroke="${line.strokeColor}" d="${line.data}"/>
 			`
@@ -51,7 +49,7 @@
 					</g>
 				</svg>
 				<div id="labelContainer">
-					${sidebarLabelTemplate(state.lines)}
+					${sidebarLabelTemplate(state.chapters)}
 				</div>
 				
 			</div>
@@ -68,7 +66,7 @@
 		var content = [
 			mapTemplate()
 		];
-		content.push(articleSectionTemplate(state.lines));
+		content.push(articleSectionTemplate(state.chapters));
 		content.push(`<section id="section${parCount}"></section><div style="height:${bigBox}px; width: 100%; background:rgba(0,0,0,0.05)">spacer</div>`)
 		return content.join('')	
 	}
@@ -79,11 +77,11 @@
 
 
 	function findHeights(){
-		let sections = state.lines.length
+		//let sections = state.chapters.length
 
 		state.contentHeight = ()=>{
 			let totalHeight = 0
-			for(let i=0; i<sections; i++){
+			for(let i=0; i<parCount; i++){
 				totalHeight += document.getElementById(`section${i+1}`).clientHeight
 			}
 			return totalHeight
@@ -108,8 +106,8 @@
 				}
 
 				let startThis = document.getElementById(`section${i}`).offsetTop
-				state.lines[i].startPct = (startThis / state.pageHeight) * 100
-				state.lines[i].endPct = ( (startThis + elem.clientHeight) / state.pageHeight ) * 100 //100
+				state.chapters[i].startPct = (startThis / state.pageHeight) * 100
+				state.chapters[i].endPct = ( (startThis + elem.clientHeight) / state.pageHeight ) * 100 //100
 				
 				if (i===0){
 					// first - section1
@@ -155,10 +153,10 @@
 		if (progressPercent >= 0){
 			sidebarLabels[0].style.color = 'green'
 		}
-		for(let i=1; i <= state.lines.length; i++){
-			if ((i===state.lines.length) && (progressPercent === state.lines[state.lines.length-1].endPct)){
+		for(let i=1; i <= state.chapters.length; i++){
+			if ((i===state.chapters.length) && (progressPercent === state.chapters[state.chapters.length-1].endPct)){
 				sidebarLabels[i].style.color = 'green'
-			} else if (progressPercent >= state.lines[i-1].endPct){
+			} else if (progressPercent >= state.chapters[i-1].endPct){
 				sidebarLabels[i].style.color = 'green'
 			} else {
 				sidebarLabels[i].style.color = ''
@@ -191,9 +189,9 @@
 
 	function positionLabels(){
 		var labelPos = 0
-		for (var i=0; i<=state.lines.length; i++){
-			if(i<state.lines.length){
-				var data = state.lines[i];
+		for (var i=0; i<=state.chapters.length; i++){
+			if(i<state.chapters.length){
+				var data = state.chapters[i];
 				var elem = document.getElementById(data.id);
 				var rect = elem.getBoundingClientRect().height
 				var dashLen = calcPathLength(elem);
@@ -213,8 +211,8 @@
 		//console.log(percentOfScroll)
 
 		// For each element that is getting drawn...
-		for (var i=0; i<state.lines.length; i++){
-			var data = state.lines[i];
+		for (var i=0; i<state.chapters.length; i++){
+			var data = state.chapters[i];
 			var elem = document.getElementById(data.id);
 
 			// Get the length of this elements path
