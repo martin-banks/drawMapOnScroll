@@ -2,46 +2,20 @@
 
 
 	const container = document.getElementById('appContainer');
-	const parCount = 3;
-	var state={
-		lines: [
-			{
-				id: 'line1',
-				data: 'M54.7,14.9c-5.2,5.7-14.9,9.8-10.3,20.1s13.9,14.4,10.3,19.6S32,76.3,29.9,92.2c-0.7,5.1,0,14.1,1.4,24.3',
-				strokeColor: '#0f0'
-			},
-			{
-				id: 'line2',
-				data: 'M31.4,116.6c2.9,21.6,8.8,48.9,11.4,58.7c3.7,14.4,7.3,34,3.7,41.2s-24.7,59.8-24.7,74.7s0,40.2,0,40.2s0,13.4,3.1,17s8,4.1,13.8,11.3s9.4,3.6,2.7,15.5s-19.6,21.6-8.8,39.7',
-				strokeColor: '#00f'
-			},
-			{
-				id: 'line3',
-				data: 'M32.5,414.9c10.8,18,21.7,35.1,23,47.9s3.8,23.7,2.3,35.6s-18.6,30.4-13.9,39.7c4.6,9.3,10.8,28.4,9.3,33C51.6,575.8,50,585,50,585',
-				strokeColor: '#f00'
-			}
+	const parCount = state.lines.length;
 
-		],
-		svgStyle: 'class="st0" fill="transparent" stroke-width="4" stroke-miterlimit="10" ',
-		labels: ''
-	}
-
-	function articleSectionTemplate(sectionId){
-		return `
-			<section id="section${sectionId}">
-				<h1>section ${sectionId} headline</h1>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae assumenda sit blanditiis, delectus dolorum nisi rerum aperiam tempore tenetur totam ullam illo laborum culpa, quibusdam ad cum, recusandae maiores deserunt.</p>
-				<p>Adipisci provident voluptatum consectetur eveniet iure quaerat nostrum ratione aliquid officiis repellat facilis rem vel, ipsam qui maxime voluptatibus iusto amet incidunt, saepe et. Perspiciatis ratione, distinctio ducimus sed architecto.</p>
-				<p>Fugiat rem velit, placeat ipsam itaque! Aspernatur error commodi quam qui mollitia odit tempora eum, nostrum repudiandae dolore dolorum quae incidunt a repellendus eveniet ratione adipisci cupiditate sunt, reprehenderit dolorem!</p>
-				<p>Mollitia labore quidem libero numquam ipsum rerum id eum sit voluptas accusantium amet sapiente accusamus, itaque nemo reprehenderit praesentium? Eos facere accusantium quidem alias corporis distinctio accusamus impedit beatae totam!</p>
-				<p>Iste omnis sapiente reiciendis perferendis tenetur in voluptas voluptates quam laborum autem illo magni quo nostrum labore sint, odio quas vitae sequi, eveniet minima quisquam aspernatur deleniti voluptatem? Ea, veniam.</p>
-				<p>Consequatur facilis eligendi, tenetur quibusdam mollitia totam, veritatis, magni fuga accusantium porro et aspernatur, illo similique ipsa atque laborum dolorum fugit odit! Beatae tempore, labore quam quos porro harum esse.</p>
-				<p>Quae esse, aperiam dicta optio laborum doloremque eligendi accusamus soluta adipisci consequatur neque sed, hic quaerat, animi ad iste nobis dolor excepturi. Fugiat reiciendis iste beatae, ex quos cupiditate est?</p>
-				<p>Quos id explicabo, quo perspiciatis magnam consectetur eveniet dolor blanditiis, tenetur omnis asperiores, vel corporis alias ratione totam non odio. Unde ducimus rem, ullam sit modi nobis soluta, vero cupiditate.</p>
-				<p>Doloremque dolore quisquam quo maiores, ex nesciunt vero, quod ab fugit, repudiandae neque. Rerum odit architecto natus, nostrum vel iusto recusandae maxime? Laudantium dolorem doloribus animi ratione sint, iste commodi?</p>
-				<p>Non sit quis fuga impedit nemo facere, quisquam voluptatem sed accusamus repellat! Doloremque ipsa, quibusdam? Voluptatum placeat corporis nostrum mollitia, rerum natus id aliquid numquam, dolorem dolores laboriosam nisi facilis!</p>
-			</section>
-		`
+	function articleSectionTemplate(chapters){
+		return chapters.map((chapter,index)=>{
+			return `
+				<section id="section${index}">
+					<h1>${chapter.article.headline}</h1>
+					${chapter.article.text.map((par, i)=>{
+						return `<p>${par}</p>`
+					}).join('')}	
+				</section>
+			`
+		}).join('')
+		
 	}
 
 
@@ -50,8 +24,21 @@
 			return `
 				<path id="${line.id}" ${state.svgStyle} stroke="${line.strokeColor}" d="${line.data}"/>
 			`
+		}).join('')	
+	}
+
+	function sidebarLabelTemplate(lines){
+		console.log(lines.length)
+		return lines.map((line, index)=>{
+			return `
+				<a id="sectionLabel${index}" href="#section${index}"><h4 class="sidebarLabel">${line.sidebarLabel}</h4></a>
+				${index === (lines.length-1) ? sidebarExtraLabelTemplate(state.endLabel, index+1) : '' }
+			`
 		}).join('')
-		
+	}
+
+	function sidebarExtraLabelTemplate(label, index){
+		return `<a id="sectionLabel${index}" href="#section${index}"><h4 class="sidebarLabel">${label}</h4></a>`
 	}
 
 	
@@ -64,11 +51,7 @@
 					</g>
 				</svg>
 				<div id="labelContainer">
-					<a id="sectionLabel0" href="#section1"><h4>before first label</h4></a>
-					<a id="sectionLabel1" href="#section2"><h4>End First label</h4></a>
-					<a id="sectionLabel2" href="#section3"><h4>End Second label</h4></a>
-					<a id="sectionLabel3" href="#section4"><h4>End Third label</h4></a>
-					
+					${sidebarLabelTemplate(state.lines)}
 				</div>
 				
 			</div>
@@ -81,17 +64,12 @@
 
 
 	function pageTemplate(){
+		let bigBox = window.innerHeight * 2
 		var content = [
 			mapTemplate()
 		];
-		for(let i=0; i<=parCount; i++){
-			if (i<parCount){
-				content.push(articleSectionTemplate(i+1))
-			} else if (i === parCount){
-				let bigBox = window.innerHeight * 2
-				content.push(`<section id="section${i+1}"></section><div style="height:${bigBox}px; width: 100%; background:rgba(0,0,0,0.05)">spacer</div>`)
-			}	
-		}
+		content.push(articleSectionTemplate(state.lines));
+		content.push(`<section id="section${parCount}"></section><div style="height:${bigBox}px; width: 100%; background:rgba(0,0,0,0.05)">spacer</div>`)
 		return content.join('')	
 	}
 
@@ -116,14 +94,14 @@
 		state.currentPos = document.body.scrollTop;
 		for (let i=0; i<=parCount; i++){
 			if(i<parCount){
-				let section = `section${i+1}`
+				let section = `section${i}`
 				let elem = document.getElementById(section)
 				state[section] = {
 					'heightPc': (elem.clientHeight / state.contentHeight) * 100,
 					'offset': elem.offsetTop - state.window.height
 				}
 
-				let startThis = document.getElementById(`section${i+1}`).offsetTop
+				let startThis = document.getElementById(`section${i}`).offsetTop
 				state.lines[i].startPct = (startThis / state.pageHeight) * 100
 				state.lines[i].endPct = ( (startThis + elem.clientHeight) / state.pageHeight ) * 100 //100
 				
@@ -169,31 +147,22 @@
 
 	function setProgressLabels() {
 		let currentPositon = document.body.scrollTop 
-		let progressPercent = (currentPositon / state.contentHeight) * 100
-		if( progressPercent >= 0 ){
-			document.querySelector('#labelContainer a:nth-of-type(1) h4').style.color = 'red'
-			document.querySelector('#labelContainer a:nth-of-type(2) h4').style.color = ''
-			document.querySelector('#labelContainer a:nth-of-type(3) h4').style.color = ''
-			document.querySelector('#labelContainer a:nth-of-type(4) h4').style.color = ''
+		let progressPercent = (currentPositon / state.contentHeight) * 100;
+		var sidebarLabels = document.getElementsByClassName('sidebarLabel');
+
+		if (progressPercent >= 0){
+			sidebarLabels[0].style.color = 'green'
 		}
-		if( progressPercent >= state.lines[1].startPct ){
-			document.querySelector('#labelContainer a:nth-of-type(1) h4').style.color = 'red'
-			document.querySelector('#labelContainer a:nth-of-type(2) h4').style.color = 'red'
-			document.querySelector('#labelContainer a:nth-of-type(3) h4').style.color = ''
-			document.querySelector('#labelContainer a:nth-of-type(4) h4').style.color = ''
-		}
-		if( progressPercent >= state.lines[2].startPct ){
-			document.querySelector('#labelContainer a:nth-of-type(1) h4').style.color = 'red'
-			document.querySelector('#labelContainer a:nth-of-type(2) h4').style.color = 'red'
-			document.querySelector('#labelContainer a:nth-of-type(3) h4').style.color = 'red'
-			document.querySelector('#labelContainer a:nth-of-type(4) h4').style.color = ''
-		}
-		if( progressPercent >= state.lines[2].endPct ){
-			document.querySelector('#labelContainer a:nth-of-type(1) h4').style.color = 'red'
-			document.querySelector('#labelContainer a:nth-of-type(2) h4').style.color = 'red'
-			document.querySelector('#labelContainer a:nth-of-type(3) h4').style.color = 'red'
-			document.querySelector('#labelContainer a:nth-of-type(4) h4').style.color = 'red'
-		}
+		for(let i=1; i <= state.lines.length; i++){
+			if ((i===state.lines.length) && (progressPercent === state.lines[state.lines.length-1].endPct)){
+				sidebarLabels[i].style.color = 'green'
+			} else if (progressPercent >= state.lines[i-1].endPct){
+				sidebarLabels[i].style.color = 'green'
+			} else {
+				sidebarLabels[i].style.color = ''
+			}
+		} 
+
 	}
 
 
@@ -232,10 +201,8 @@
 			} else {
 				document.querySelector(`#labelContainer a#sectionLabel${i}`).style.top = `${labelPos}px`
 			}
-			labelPos += rect
-			
+			labelPos += rect	
 		}
-
 	}
 
 	function scrollEventHandler(){
