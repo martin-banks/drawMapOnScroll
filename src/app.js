@@ -79,9 +79,15 @@
 
 
 	function findHeights(){
-		state.contentHeight = document.getElementById('section1').clientHeight + 
-							document.getElementById('section2').clientHeight + 
-							document.getElementById('section3').clientHeight;
+		let sections = state.lines.length
+
+		state.contentHeight = ()=>{
+			let totalHeight = 0
+			for(let i=0; i<sections; i++){
+				totalHeight += document.getElementById(`section${i+1}`).clientHeight
+			}
+			return totalHeight
+		}
 		state.window = {
 			height: window.innerHeight
 		}
@@ -105,8 +111,6 @@
 				state.lines[i].startPct = (startThis / state.pageHeight) * 100
 				state.lines[i].endPct = ( (startThis + elem.clientHeight) / state.pageHeight ) * 100 //100
 				
-				//document.querySelector(`#labelContainer a:nth-of-type(${i+1})`).style.top = `${(startThis / state.contentHeight) * 100}%`
-
 				if (i===0){
 					// first - section1
 					state.firstSection = section
@@ -127,9 +131,7 @@
 		let lastSection = document.getElementById(state.lastSection)
 			state.scrollPercent = ( (state.currentPos) / (state.pageHeight - lastSection.clientHeight - window.innerHeight ) ) * 100
 			state.windowPercent = ( document.body.scrollTop / (document.body.clientHeight - window.innerHeight) ) * 100
-			//console.log('window percent:', state.windowPercent)
-
-			
+			//console.log('window percent:', state.windowPercent)	
 	}
 
 
@@ -201,7 +203,7 @@
 			} else {
 				document.querySelector(`#labelContainer a#sectionLabel${i}`).style.top = `${labelPos}px`
 			}
-			labelPos += rect	
+			labelPos += rect
 		}
 	}
 
@@ -233,7 +235,6 @@
 	}
 
 
-
 	findPositions();
 	scrollEventHandler();
 	console.log(state)
@@ -244,7 +245,6 @@
 	window.addEventListener("scroll", function () {
 		scrollEventHandler();
 		setProgressLabels()
-
 	}, false);
 
 
