@@ -47,7 +47,7 @@
 	
 	function mapTemplate(){
 		return `
-			<div class="svgHolder">
+			<div id="svgHolder" class="svgHolder svgHolderStartPosition">
 				<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 					<g class="all">
 						${linesTemplate()}
@@ -68,12 +68,24 @@
 
 	function pageTemplate(){
 		let bigBox = window.innerHeight * 2
-		var content = [
+		/*var content = [
 			mapTemplate()
 		];
 		content.push(articleSectionTemplate(state.chapters));
 		content.push(`<section id="section${parCount}"></section><div style="height:${bigBox}px; width: 100%; background:rgba(0,0,0,0.05)">spacer</div>`)
-		return content.join('')	
+		return content.join('')	*/
+
+		return `
+			<div id="headlineContainer">
+				<h1>Main headline for story here</h1>
+			</div>
+			${mapTemplate()}
+			${articleSectionTemplate(state.chapters)}
+			<section id="section${parCount}"></section>
+			<div style="height:${bigBox}px; width: 100%; background:rgba(0,0,0,0.05)">
+				spacer
+			</div>
+		`
 	}
 
 
@@ -82,8 +94,6 @@
 
 
 	function findHeights(){
-		//let sections = state.chapters.length
-
 		state.contentHeight = ()=>{
 			let totalHeight = 0
 			for(let i=0; i<parCount; i++){
@@ -191,6 +201,15 @@
 	// If you use other elem types, you will have to add support for them here.
 	}
 
+	// transition map from display to side bar
+	function moveMap(percentOfScroll){
+		//var percentOfScroll = (( document.body.scrollTop / (document.body.clientHeight ) ) ) * 100
+		if(percentOfScroll >= 3){
+			document.getElementById('svgHolder').className = 'svgHolder'
+		} else {
+			document.getElementById('svgHolder').className = 'svgHolder svgHolderStartPosition'
+		}
+	}
 
 	function positionLabels(){
 		var labelPos = 0
@@ -214,7 +233,7 @@
 		// Calculate how far down the page the user is 
 		var percentOfScroll = (( document.body.scrollTop / (document.body.clientHeight ) ) ) * 100
 		//console.log(percentOfScroll)
-
+		moveMap(percentOfScroll)
 		// For each element that is getting drawn...
 		for (var i=0; i<state.chapters.length; i++){
 			var data = state.chapters[i];
@@ -236,6 +255,8 @@
 			elem.setAttribute("stroke-dashoffset", dashOffset);
 		}//end for loop
 	}
+
+	
 
 
 	findPositions();
