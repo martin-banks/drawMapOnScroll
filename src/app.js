@@ -4,11 +4,10 @@
 	const parCount = state.chapters.length;
 
 	function articleSectionTemplate(chapters){
-		return `<article>
-			${ chapters.map((chapter,index)=>{
+		return `${ chapters.map((chapter,index)=>{
 				return `
 					<section id="section${index}">
-						<img class="displayImage" src="${state.imagePath}${chapter.article.image}" alt="">
+						<img id="img${index}" class="displayImage" src="${state.imagePath}${chapter.article.image}" alt="">
 						<h1>${chapter.article.headline}</h1>
 						${chapter.article.text.map((par, i)=>{
 							return `<p>${par}</p>`
@@ -16,8 +15,7 @@
 					</section>
 				`
 				}).join('')
-			}
-		</article>`
+			}`
 		
 	}
 
@@ -76,15 +74,17 @@
 		return content.join('')	*/
 
 		return `
-			<div id="headlineContainer">
-				<h1>Main headline for story here</h1>
-			</div>
 			${mapTemplate()}
-			${articleSectionTemplate(state.chapters)}
-			<section id="section${parCount}"></section>
-			<div style="height:${bigBox}px; width: 100%; background:rgba(0,0,0,0.05)">
-				spacer
-			</div>
+			<article>
+				${articleSectionTemplate(state.chapters)}
+			</article>
+			<section id="section${parCount}">
+				<div style="height:${bigBox}px; width: 100%; background:rgba(0,0,0,0.05)">
+					spacer
+				</div>
+			</section>
+			
+			
 		`
 	}
 
@@ -97,7 +97,7 @@
 		state.contentHeight = ()=>{
 			let totalHeight = 0
 			for(let i=0; i<parCount; i++){
-				totalHeight += document.getElementById(`section${i+1}`).clientHeight
+				totalHeight += document.getElementById(`section${i}`).clientHeight
 			}
 			return totalHeight
 		}
@@ -120,9 +120,14 @@
 					'offset': elem.offsetTop - state.window.height
 				}
 
-				let startThis = document.getElementById(`section${i}`).offsetTop
+				let startThis = document.getElementById(section).offsetTop
+				console.log(state.pageHeight)
+				
 				state.chapters[i].startPct = (startThis / state.pageHeight) * 100
-				state.chapters[i].endPct = ( (startThis + elem.clientHeight) / state.pageHeight ) * 100 //100
+				console.log('start ', section, state.chapters[i].startPct)
+				
+				state.chapters[i].endPct = ( (startThis + elem.clientHeight) / state.pageHeight ) * 100 
+				console.log('end ', section, state.chapters[i].endPct, '\n---')
 				
 				if (i===0){
 					// first - section1
@@ -144,7 +149,7 @@
 		let lastSection = document.getElementById(state.lastSection)
 			state.scrollPercent = ( (state.currentPos) / (state.pageHeight - lastSection.clientHeight - window.innerHeight ) ) * 100
 			state.windowPercent = ( document.body.scrollTop / (document.body.clientHeight - window.innerHeight) ) * 100
-			//console.log('window percent:', state.windowPercent)	
+			console.log('window percent:', state.windowPercent)	
 	}
 
 
@@ -232,7 +237,7 @@
 	function scrollEventHandler(){
 		// Calculate how far down the page the user is 
 		var percentOfScroll = (( document.body.scrollTop / (document.body.clientHeight ) ) ) * 100
-		//console.log(percentOfScroll)
+		console.log('percent of scroll:', percentOfScroll)
 		moveMap(percentOfScroll)
 		// For each element that is getting drawn...
 		for (var i=0; i<state.chapters.length; i++){
