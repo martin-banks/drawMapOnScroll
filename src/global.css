@@ -7,7 +7,7 @@ h1{
 	padding-bottom: 16px;
 	font-size: 40px;
 	line-height: 1.2;
-	border-bottom: solid 1px #ccc;
+	border-bottom: solid 1px #000;
 }
 
 #headlineContainer h1 {
@@ -78,7 +78,7 @@ p {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 0.1);
+	//background-color: rgba(0, 0, 0, 0.1);
 }
 
 #labelContainer a h4 {
@@ -112,3 +112,16 @@ g.all {
 	color: #000;
 }
 
+canvas {
+	position: fixed;
+	top: 0;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	z-index: -1;
+	transition: all 1s ease-in-out 0s;
+}
+
+.hideLines {
+	opacity: 0;
+}

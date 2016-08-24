@@ -8,6 +8,7 @@
 				return `
 					<section id="section${index}">
 						<img id="img${index}" class="displayImage" src="${state.imagePath}${chapter.article.image}" alt="">
+						<canvas id="joiningLine${index}" class="joiningLine"></canvas>
 						<h1>${chapter.article.headline}</h1>
 						${chapter.article.text.map((par, i)=>{
 							return `<p>${par}</p>`
@@ -83,8 +84,6 @@
 					spacer
 				</div>
 			</section>
-			
-			
 		`
 	}
 
@@ -209,9 +208,19 @@
 	// transition map from display to side bar
 	function moveMap(percentOfScroll){
 		//var percentOfScroll = (( document.body.scrollTop / (document.body.clientHeight ) ) ) * 100
+		var allJoinLines = document.getElementsByClassName('joiningLine');
 		if(percentOfScroll >= 3){
-			document.getElementById('svgHolder').className = 'svgHolder'
+			document.getElementById('svgHolder').className = 'svgHolder';
+			setTimeout(function() {
+				for(let i=0; i<allJoinLines.length; i++){
+					allJoinLines[i].className = 'joiningLine'
+				}
+			}, 500);
+
 		} else {
+			for(let i=0; i<allJoinLines.length; i++){
+					allJoinLines[i].className = 'joiningLine hideLines'
+				}
 			document.getElementById('svgHolder').className = 'svgHolder svgHolderStartPosition'
 		}
 	}
@@ -237,7 +246,7 @@
 	function scrollEventHandler(){
 		// Calculate how far down the page the user is 
 		var percentOfScroll = (( document.body.scrollTop / (document.body.clientHeight ) ) ) * 100
-		console.log('percent of scroll:', percentOfScroll)
+		//console.log('percent of scroll:', percentOfScroll)
 		moveMap(percentOfScroll)
 		// For each element that is getting drawn...
 		for (var i=0; i<state.chapters.length; i++){
@@ -258,7 +267,7 @@
 
 			elem.setAttribute("stroke-dasharray", dashLen);
 			elem.setAttribute("stroke-dashoffset", dashOffset);
-		}//end for loop
+		} //end for loop
 	}
 
 	
@@ -269,7 +278,6 @@
 	console.log(state)
 	setProgressLabels()
 	positionLabels()
-	
 
 	window.addEventListener("scroll", function () {
 		scrollEventHandler();
